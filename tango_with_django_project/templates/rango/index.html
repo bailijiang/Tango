@@ -15,6 +15,34 @@
         hey there partner!<br/>
         <strong>{{ boldmessages }}</strong>
     </div>
+
+    <div>
+        {% if categories %}
+            <h3>Most Liked Categories:</h3>
+        <ul>
+            {% for category in categories %}
+{#              <li>{{ category.name }}</li>#}
+                <li><a href="/rango/category/{{ category.slug }}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+        {% else %}
+            <strong>There are no categories present.</strong>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if pages %}
+            <h3>Most Viewed Pages:</h3>
+            <ul>
+                {% for page in pages %}
+                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>There are no Pages present.</strong>
+        {% endif %}
+    </div>
+
     <div>
         <a href="/rango/about/">About</a><br/>
         <img src="{% static "images/rango.jpg" %}"
