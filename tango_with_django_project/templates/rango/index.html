@@ -2,10 +2,16 @@
 {% load staticfiles %}
 
 {% block title_block %}
-    Rango says...
+    Index
 {% endblock %}
 
 {% block body_block %}
+    {% if user.is_authenticated %}
+        <h1>Rango says... hello {{ user.username }}</h1>
+    {% else %}
+        <h1>Rango says... hello world!</h1>
+    {% endif %}
+
     <div>
         hey there partner!<br/>
         <strong>{{ boldmessages }}</strong>
