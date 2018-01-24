@@ -5,10 +5,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
 
 # Create your views here.
 
+def vistor_cookie_handler(request, response):
+    visits = int(request.COOKIES.get('visits', 1))
+    last_visit_cookie = request.COOKIES.get('last_visit', str(datetime.now()))
+    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
+                                        '%Y-%m-%d %H:%M:%S')
+    if (datetime.now() - last_visit_time).seconds > 5:
+        visits = visits + 1
+        response.set_cookie('last_visit', str(datetime.now()))
+    else:
+        visits = 1
+        response.set_cookie('last_visit', str(datetime.now()))
+    response.set_cookie('visits', visits)
+
+
 def index(request):
+    request.session.set_test_cookie()
     # context_dict = {'boldmessages': "Crunchy, creamy, cookie, candy, cupcake"}
     # return HttpResponse("Rango says hey there partner!</br><a href='/rango/about'>about</a>")
 
@@ -16,7 +32,11 @@ def index(request):
     page_list = Page.objects.order_by('-views')[:5]
     context_dict = {'categories': category_list, 'pages': page_list}
 
-    return render(request, 'rango/index.html', context_dict)
+    response = render(request, 'rango/index.html', context_dict)
+
+    vistor_cookie_handler(request, response)
+
+    return response
 
 def about(request):
 
@@ -70,6 +90,10 @@ def add_page(request, category_name_slug):
     return render(request, 'rango/add_page.html', context_dict)
 
 def register(request):
+    if request.session.test_cookie_worked():
+        print("TEST Cookie worked!")
+        request.session.delete_test_cookie()
+
     registered = False
 
     if request.method == 'POST':
