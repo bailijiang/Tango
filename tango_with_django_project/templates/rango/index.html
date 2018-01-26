@@ -1,4 +1,4 @@
-{% extends 'rango/base.html' %}
+{% extends 'rango/base_bootstrap.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -6,11 +6,14 @@
 {% endblock %}
 
 {% block body_block %}
+    <div class="jumbotron">
+    <h1 class="display-3">Rango says...</h1>
     {% if user.is_authenticated %}
-        <h1>Rango says... hello {{ user.username }}</h1>
+        <h1>hey there {{ user.username }}</h1>
     {% else %}
-        <h1>Rango says... hello world!</h1>
+        <h1>hey there parterner!</h1>
     {% endif %}
+    </div>
 
     <div>
         <p>visit: {{ visits }} times</p><br>
@@ -20,31 +23,36 @@
         hey there partner!<br/>
         <strong>{{ boldmessages }}</strong>
     </div>
-    <div>
-        {% if categories %}
-            <h3>Most Liked Categories:</h3>
-        <ul>
-            {% for category in categories %}
-                <li><a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a></li>
-            {% endfor %}
-        </ul>
-        {% else %}
-            <strong>There are no categories present.</strong>
-        {% endif %}
-    </div>
 
-    <div>
-        {% if pages %}
-            <h3>Most Viewed Pages:</h3>
-            <ul>
-                {% for page in pages %}
-                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
+    <div class="row marketing">
+        <div class="col-lg-6">
+            {% if categories %}
+                <h4>Most Liked Categories:</h4>
+            <ul class="list-group">
+                {% for category in categories %}
+                    <li class="list-group-item"><a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a></li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <strong>There are no Pages present.</strong>
-        {% endif %}
+            {% else %}
+                <strong>There are no categories present.</strong>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-6">
+            {% if pages %}
+                <h4>Most Viewed Pages:</h4>
+                <ul class="list-group">
+                    {% for page in pages %}
+                        <li class="list-group-item"><a href="{{ page.url }}">{{ page.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <strong>There are no Pages present.</strong>
+            {% endif %}
+        </div>
+
     </div>
+
     <div>
         <img src="{% static "images/rango.jpg" %}"
                     alt="Picture of Rango"/>
@@ -55,61 +63,3 @@
 
 
 
-<!--
-<!DOCTYPE html>
-
-{% load staticfiles %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Rango</title>
-{#    <link rel="stylesheet" href="{% static "css/base.css"%}" />#}
-{#    <script src="{% static "js/jquery.js" %}"></script>#}
-</head>
-<body>
-    <h1>Rango says...</h1>
-
-    <div>
-        hey there partner!<br/>
-        <strong>{{ boldmessages }}</strong>
-    </div>
-
-    <div>
-        {% if categories %}
-            <h3>Most Liked Categories:</h3>
-        <ul>
-            {% for category in categories %}
-{#              <li>{{ category.name }}</li>#}
-                <li><a href="{% url 'rango:show_category' category.slug %}">{{ category.name }}</a></li>
-            {% endfor %}
-        </ul>
-        {% else %}
-            <strong>There are no categories present.</strong>
-        {% endif %}
-    </div>
-
-    <div>
-        {% if pages %}
-            <h3>Most Viewed Pages:</h3>
-            <ul>
-                {% for page in pages %}
-                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <strong>There are no Pages present.</strong>
-        {% endif %}
-    </div>
-
-    <div>
-        <a href="{% url 'rango:add_category' %} ">Add a Category</a><br>
-        <a href="{% url 'rango:about' %}">About</a><br/>
-        <img src="{% static "images/rango.jpg" %}"
-                alt="Picture of Rango"/>
-    </div>
-
-    <br/>
-
-</body>
-</html>
--->
